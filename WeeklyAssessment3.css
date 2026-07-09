@@ -1,0 +1,237 @@
+html{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+body{
+    max-width: 70%;
+    margin: 0%;
+    padding: 0%;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#screen{
+    border: solid;
+    border-radius: 10% 10% 0% 0%;
+    border-color: black;
+    padding: 10% 1% 10% 0%;
+    margin: 0;
+    font-size: 35px;
+    background-color: rgb(225, 225, 240);
+    grid-area: g16;
+    text-align: right;
+    overflow-x: auto;       /* allow side scrolling */
+    overflow-y: hidden;
+    white-space: nowrap;
+    min-height: 1.5em; /* Keeps height when empty */
+    min-width: 100px;  /* Prevents horizontal snapping */
+}
+.item1{
+    grid-area: g1;
+    font-size: 30px;
+}
+.item2{
+    grid-area: g2;
+    font-size: 30px;
+}
+.item3{
+    grid-area: g3;
+    font-size: 30px;
+}
+.item4{
+    grid-area: g4;
+    font-size: 30px;
+}
+.item5{
+    grid-area: g5;
+    font-size: 30px;
+}
+.item6{
+    grid-area: g6;
+    font-size: 30px;
+}
+.item7{
+    grid-area: g7;
+    font-size: 30px;
+}
+.item8{
+    grid-area: g8;
+    font-size: 30px;
+}
+.item9{
+    grid-area: g9;
+    font-size: 30px;
+}
+.item10{
+    grid-area: g0;
+    font-size: 30px;
+}
+.itemAdd{
+    grid-area: g10;
+    font-size: 30px;
+}
+.itemSubtract{
+    grid-area: g11;
+    font-size: 30px;
+}
+.itemMultiply{
+    grid-area: g12;
+    font-size: 30px;
+}
+.itemDivide{
+    grid-area: g13;
+    font-size: 30px;
+}
+.itemBMICalculation{
+    grid-area: g14;
+    font-size: 15px;
+}
+.itemSolve{
+    grid-area: g15;
+    font-size: 30px;
+}
+.itemClear{
+    grid-area: g17;
+    font-size: 15px;
+}
+
+
+.grid div{
+  padding: 4px;
+  margin: 2px;
+  border: 2px solid rgb(45, 6, 6);
+}
+.grid{ 
+    min-height: 590px;
+    min-width: 500px;
+    max-height: 590px;
+    max-width: 500px;
+    padding: 0%;
+    margin-bottom: 2%;
+    display: grid;
+    grid-template-areas:
+    'g16 g16 g16 g16 g16'
+    'g1 g2 g3 g10 g11'
+    'g4 g5 g6 g12 g13'
+    'g7 g8 g9 g14 g17'
+    'g0 g0 g0 g15 g15';
+    grid-gap: 2px;
+    justify-self: center;
+    text-align: center;
+ 
+}
+.grid > button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 30 10 19 10px rgb(216, 3, 3), 0 2px 6px rgb(0, 0, 0);
+}
+
+label {
+    display: inline-block;          /* allows width control */
+    width: 140px;                   /* fixed label width for alignment */
+    font-weight: bold;              /* makes labels bold */
+    color: #555;                    /* soft dark grey text */
+}
+input[type="text"] {
+    width: calc(100% - 150px);     /* adjusts width next to label */
+    padding: 8px;                  /* space inside input box */
+    border: 1px solid #ccc;        /* light grey border */
+    border-radius: 5px;            /* rounded corners */
+    outline: none;                 /* removes default outline */
+    transition: 0.3s;              /* smooth hover/focus animation */
+}
+
+#close{
+    text-align: right;
+}
+#close button{
+    text-align: right;
+    color: white;
+    background-color: red;
+
+}
+#close :hover{
+
+    background-color: rgb(224, 20, 20);
+    
+}
+
+#menuToggle{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+
+/*menu*/
+#content {
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 5px;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f5f5f7;
+}
+
+/* Side Menu Box */
+#side-menu {
+    width: 250px;
+    background-color: #1a1a1a;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Menu Links */
+#side-menu a {
+    display: block; /* Makes the entire row clickable */
+    text-decoration: none;
+    padding: 0 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Menu Text inside Links */
+#side-menu a p {
+    color: #cccccc;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    padding: 12px 0; /* Creates vertical spacing between items */
+}
+
+/* Hover Effects */
+#side-menu a:hover {
+    background-color: #333333;
+}
+
+#side-menu a:hover p {
+    color: #ffffff;
+}
+
+#positioning{
+    margin-left: 10%;
+    margin-right: 10%;}
+
+
+@media (max-width: 768px) {
+    form {
+        width: 90%;              /* form becomes wider on small screens */
+    }
+
+    label {
+        display: block;         /* label moves above input */
+        width: 100%;            /* full width label */
+        margin-bottom: 5px;     /* spacing below label */
+    }
+
+    input[type="text"] {
+        width: 100%;            /* inputs take full width */
+    }
+}
