@@ -1,3 +1,27 @@
+const screen = document.querySelector("#screen")
+const btns = document.querySelectorAll(
+    ".grid button:not(.itemBMICalculation):not(.itemSolve):not(.itemClear)"
+    )
+const bmiCalculation = document.querySelector(".itemBMICalculation")
+
+const clear = document.querySelector(".itemClear")
+
+const solve = document.querySelector(".itemSolve")
+
+const close = document.querySelector("#closeWindow")
+
+const calculate = document.querySelector("#calculateBMI")
+
+const menuToggle = document.getElementById("menuToggle")
+
+const menuContent = document.getElementById("content")
+
+const content = document.getElementById("content")
+
+const dialog = document.getElementById("modal");
+    const weight = document.querySelector("#weight")
+    const height = document.querySelector("#height")
+
 //function to register button clicks and log them to the screen
 function onButtonClick(button){
     screen.textContent += String(button.innerText)
@@ -75,45 +99,36 @@ function calculations(){
     console.log(evaluateMathString(display2))
 }
 
-function bmiCalculations (){
-    event.preventDefault()
-    const dialog = document.getElementById("modal");
+function bmiCalculations (event){
+    event.preventDefault(event)
     dialog.showModal();
-    close.addEventListener("click", () => dialog.close())
 }
 
-function bmiSolutionDisplay(){
+function bmiSolutionDisplay(event){
     event.preventDefault()
-    const weight = document.querySelector("#weight").value
-    const height = document.querySelector("#height").value
-    const bmi = Number(weight)/(Number(height) * Number(height))
-    screen.innerText = bmi.toFixed(2)
+    if(weight.value == "" && height.value == ""){
+        screen.innerText = ""
+        dialog.close();
+        return
 
+    }
+    const bmi = Number(weight.value)/(Number(height.value) * Number(height.value))
+    
+    if (Number.isNaN(bmi)){
+        screen.innerText = "Syntax Error"
+        dialog.close();
+        return
+    }
+    screen.innerText = bmi.toFixed(2)
 }
 
 function clearScreen (){
     screen.innerText = ""
 }
 
-const screen = document.querySelector("#screen")
-const btns = document.querySelectorAll(
-    ".grid button:not(.itemBMICalculation):not(.itemSolve):not(.itemClear)"
-    )
-const bmiCalculation = document.querySelector(".itemBMICalculation")
 
-const clear = document.querySelector(".itemClear")
-
-const solve = document.querySelector(".itemSolve")
-
-const close = document.querySelector("#closeWindow")
-
-const calculate = document.querySelector("#calculateBMI")
-
-const menuToggle = document.getElementById("menuToggle")
-
-const menuContent = document.getElementById("content")
 btns.forEach((btn) => btn.addEventListener("click", (btn) => {
-    if(screen.innerText == "Syntax Error" || screen.innerText == "Infinity"){
+    if(screen.innerText == "Syntax Error" || screen.innerText == "Infinity" || screen.innerText == "NaN"){
         screen.innerText = ""
     }
     onButtonClick(btn.target)
@@ -123,21 +138,32 @@ btns.forEach((btn) => btn.addEventListener("click", (btn) => {
 //  console.log(index, btn);
 //}
 solve.addEventListener("click", () => {
-    if(screen.innerText == "Syntax Error" || screen.innerText == "Infinity" || screen.innerText == ""){
+    if(screen.innerText == "Syntax Error" || screen.innerText == "Infinity" || screen.innerText == "" || screen.innerText == "NaN"){
         return screen.innerText = ""
     }
     calculations()})
 
-bmiCalculation.addEventListener("click", () => bmiCalculations())
+bmiCalculation.addEventListener("click", (event) => bmiCalculations(event))
 
 clear.addEventListener("click", () => clearScreen())
 
-calculate.addEventListener("click", () => bmiSolutionDisplay())
+calculate.addEventListener("click", (event) => {
+    bmiSolutionDisplay(event)
+    dialog.close();
+    weight.value = ""
+    height.value = ""
+})
 
-window.addEventListener("click", () => {menuContent.style.display = "none"})
+close.addEventListener("click", () => {
+    dialog.close()
+    weight.value = ""
+    height.value = ""
+})
+
+window.addEventListener("click", () => {content.style.display = "none"})
 
 menuToggle.addEventListener("click", (event) => {
     event.stopPropagation();
-    menuContent.style.display = content.style.display === "none" ? "block" : "none";
+    content.style.display = content.style.display == "block" ? "none" : "block";
 })
 
