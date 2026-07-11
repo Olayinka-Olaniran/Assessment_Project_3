@@ -1,237 +1,482 @@
-html{
-    max-width: 100%;
-    max-height: 100%;
+/* ===========================================================
+   UTILITY CALCULATOR — REPLACEMENT STYLESHEET
+   Targets the exact HTML as written — no changes to HTML or JS needed.
+   =========================================================== */
+
+/* -----------------------------------------------------------
+   CSS VARIABLES (the entire color palette lives here —
+   change one value and it updates everywhere it's used)
+   ----------------------------------------------------------- */
+:root {
+    --bg: #eef0f5;              /* page background, sits behind the calculator */
+    --calc-bg: #1f2430;         /* calculator body — dark top of gradient */
+    --calc-bg-2: #262c3b;       /* calculator body — slightly lighter bottom of gradient */
+    --screen-bg: #10131a;       /* display screen background (near-black) */
+    --screen-text: #eaf6ff;     /* display screen text (soft white-blue) */
+
+    --key-bg: #313849;          /* default number key background */
+    --key-text: #f2f4f8;        /* default number key text */
+    --key-hover: #3c465c;       /* number key on mouse hover */
+    --key-active: #4a5776;      /* number key while being pressed */
+
+    --op-bg: #ff9f43;           /* + − × ÷ keys (orange, distinct from numbers) */
+    --op-hover: #ffb066;        /* operator key on hover — slightly lighter orange */
+    --op-active: #e8890f;       /* operator key while pressed — darker orange */
+    --op-text: #1f2430;         /* text on top of orange operator keys */
+
+    --special-bg: #3a4258;      /* BMI key — muted blue-grey, "utility" feel */
+
+    --danger: #ff5c5c;          /* destructive: Clear key, dialog close X */
+    --danger-hover: #ff7a7a;    /* lighter red for hover on destructive actions */
+    --danger-text: #2a0000;     /* dark text on top of red danger keys */
+
+    --accent: #5ec8ff;          /* primary action highlight: = key, Calculate button */
+    --accent-hover: #7fd4ff;    /* accent on hover */
+    --accent-active: #3fb2e6;   /* accent while pressed */
+    --accent-text: #062733;     /* dark text on top of accent-colored elements */
+
+    --radius: 14px;             /* shared corner rounding — calc body, dialog, etc */
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* shared drop shadow for depth */
 }
 
-body{
-    max-width: 70%;
-    margin: 0%;
-    padding: 0%;
+/* -----------------------------------------------------------
+   RESET / BASE
+   ----------------------------------------------------------- */
+* {
+    box-sizing: border-box; /* padding + border included in width/height, not added on top */
+}
+
+html, body {
+    max-width: 100%; /* prevents children from triggering a horizontal scrollbar */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;      /* body fills the full viewport height even with little content */
     overflow-x: hidden;
+    display: flex;          /* centers everything horizontally on the page */
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+h1 {
+    /* clamp(min, preferred, max) — title scales with screen but stays within safe limits */
+    font-size: clamp(1.4rem, 3vw + 0.8rem, 2.2rem);
+    margin: 1.2em 0 0.6em;
+    color: #222;
+    text-align: center;
+}
+
+/* -----------------------------------------------------------
+   PAGE WRAPPER — keeps the whole app centred and capped in width
+   ----------------------------------------------------------- */
+#positioning {
+    width: 100%;
+    max-width: 520px;   /* stops the layout getting too spread out on large screens */
+    margin: 0 auto;
+    padding: 0 4vw 3rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
-#screen{
-    border: solid;
-    border-radius: 10% 10% 0% 0%;
-    border-color: black;
-    padding: 10% 1% 10% 0%;
-    margin: 0;
-    font-size: 35px;
-    background-color: rgb(225, 225, 240);
-    grid-area: g16;
-    text-align: right;
-    overflow-x: auto;       /* allow side scrolling */
-    overflow-y: hidden;
-    white-space: nowrap;
-    min-height: 1.5em; /* Keeps height when empty */
-    min-width: 100px;  /* Prevents horizontal snapping */
-}
-.item1{
-    grid-area: g1;
-    font-size: 30px;
-}
-.item2{
-    grid-area: g2;
-    font-size: 30px;
-}
-.item3{
-    grid-area: g3;
-    font-size: 30px;
-}
-.item4{
-    grid-area: g4;
-    font-size: 30px;
-}
-.item5{
-    grid-area: g5;
-    font-size: 30px;
-}
-.item6{
-    grid-area: g6;
-    font-size: 30px;
-}
-.item7{
-    grid-area: g7;
-    font-size: 30px;
-}
-.item8{
-    grid-area: g8;
-    font-size: 30px;
-}
-.item9{
-    grid-area: g9;
-    font-size: 30px;
-}
-.item10{
-    grid-area: g0;
-    font-size: 30px;
-}
-.itemAdd{
-    grid-area: g10;
-    font-size: 30px;
-}
-.itemSubtract{
-    grid-area: g11;
-    font-size: 30px;
-}
-.itemMultiply{
-    grid-area: g12;
-    font-size: 30px;
-}
-.itemDivide{
-    grid-area: g13;
-    font-size: 30px;
-}
-.itemBMICalculation{
-    grid-area: g14;
-    font-size: 15px;
-}
-.itemSolve{
-    grid-area: g15;
-    font-size: 30px;
-}
-.itemClear{
-    grid-area: g17;
-    font-size: 15px;
-}
+/* -----------------------------------------------------------
+   CALCULATOR GRID
+   ----------------------------------------------------------- */
+.grid {
+    /* min() picks the smaller of the two — fluid on narrow screens, capped on wide ones */
+    width: min(94vw, 420px);
+    padding: clamp(10px, 2.5vw, 18px);
+    margin: 0 auto 2rem;
+    background: linear-gradient(160deg, var(--calc-bg), var(--calc-bg-2));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
 
-
-.grid div{
-  padding: 4px;
-  margin: 2px;
-  border: 2px solid rgb(45, 6, 6);
-}
-.grid{ 
-    min-height: 590px;
-    min-width: 500px;
-    max-height: 590px;
-    max-width: 500px;
-    padding: 0%;
-    margin-bottom: 2%;
     display: grid;
     grid-template-areas:
-    'g16 g16 g16 g16 g16'
-    'g1 g2 g3 g10 g11'
-    'g4 g5 g6 g12 g13'
-    'g7 g8 g9 g14 g17'
-    'g0 g0 g0 g15 g15';
-    grid-gap: 2px;
-    justify-self: center;
-    text-align: center;
- 
+        'g16 g16 g16 g16 g16'
+        'g1  g2  g3  g10 g11'
+        'g4  g5  g6  g12 g13'
+        'g7  g8  g9  g14 g17'
+        'g0  g0  g0  g15 g15';
+    grid-template-columns: repeat(5, 1fr); /* 5 equal columns — every key lines up */
+    /* "auto" rows size to content (the buttons' own height via aspect-ratio below) */
+    grid-template-rows: auto repeat(4, auto);
+    gap: clamp(6px, 1.6vw, 10px);
 }
-.grid > button{
+
+/* -----------------------------------------------------------
+   DISPLAY SCREEN
+   #screen is a <p> tag — block display so overflow-x scroll works natively
+   ----------------------------------------------------------- */
+#screen {
+    grid-area: g16;
+    margin: 0 0 clamp(6px, 1.5vw, 10px) 0;
+
+    /* fixed height + matching line-height = text is always vertically centred,
+       and the box NEVER grows when more digits are typed */
+    height: clamp(3.2rem, 14vw, 4.2rem);
+    line-height: clamp(3.2rem, 14vw, 4.2rem);
+
+    padding: 0 clamp(12px, 3vw, 18px);
+    border: none;
+    border-radius: 10px;
+    background: var(--screen-bg);
+    color: var(--screen-text);
+
+    /* clamp keeps font size proportional to viewport width */
+    font-size: clamp(1.3rem, 4.5vw, 2rem);
+    font-family: "Courier New", Consolas, monospace;
+    font-weight: 400;
+    text-align: right;      /* numbers align to the right, like a real calculator */
+    letter-spacing: 0.5px;
+
+    white-space: nowrap;    /* prevents text wrapping to a second line */
+    overflow-x: auto;       /* long expressions scroll sideways inside the fixed box */
+    overflow-y: hidden;
+    cursor: ew-resize;      /* left-right arrow cursor signals the display is scrollable */
+    user-select: none;      /* stops text being highlighted when dragging to scroll */
+
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6); /* inner shadow makes it look recessed */
+}
+
+/* slim custom scrollbar on the display */
+#screen::-webkit-scrollbar { height: 3px; }
+#screen::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+/* -----------------------------------------------------------
+   KEYS — shared base styles
+   ----------------------------------------------------------- */
+.grid > button {
+    /* aspect-ratio + width drives height — no explicit height needed.
+       The row auto-sizes to the button, not the other way around,
+       which avoids the circular sizing bug where 1fr rows fight with height:100% */
+    aspect-ratio: 1 / 0.85;    /* slightly wider than tall — standard calculator key shape */
+    width: 100%;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    background: var(--key-bg);
+    color: var(--key-text);
+    font-size: clamp(1rem, 4vw, 1.4rem);
+    font-weight: 500;
+    cursor: pointer;
+    /* transition animates hover colour, the press-down movement, and shadow together */
+    transition: background-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4); /* bottom shadow looks like physical key depth */
+    -webkit-tap-highlight-color: transparent; /* removes grey flash on mobile tap */
+}
+
+.grid > button:hover  { background: var(--key-hover); }
+.grid > button:active {
+    background: var(--key-active);
+    transform: translateY(2px);         /* key moves down when pressed */
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4); /* shadow shrinks to reinforce "pressed" */
+}
+
+/* -----------------------------------------------------------
+   NUMBER KEYS — just assign their grid areas; styling inherited above
+   ----------------------------------------------------------- */
+.item1  { grid-area: g1; }
+.item2  { grid-area: g2; }
+.item3  { grid-area: g3; }
+.item4  { grid-area: g4; }
+.item5  { grid-area: g5; }
+.item6  { grid-area: g6; }
+.item7  { grid-area: g7; }
+.item8  { grid-area: g8; }
+.item9  { grid-area: g9; }
+
+/* 0 spans 3 columns — aspect-ratio scales by ×3 so its height matches a normal key */
+.grid > button.item10 {
+    grid-area: g0;
+    aspect-ratio: 3 / 0.85;
+}
+
+/* -----------------------------------------------------------
+   OPERATOR KEYS  + − × ÷
+   Grouped selector: one colour rule covers all four
+   ----------------------------------------------------------- */
+.itemAdd, .itemSubtract, .itemMultiply, .itemDivide {
+    background: var(--op-bg);  /* orange = immediately distinct from number keys */
+    color: var(--op-text);
+    font-weight: 700;
+}
+.itemAdd:hover, .itemSubtract:hover,
+.itemMultiply:hover, .itemDivide:hover { background: var(--op-hover); }
+
+.itemAdd:active, .itemSubtract:active,
+.itemMultiply:active, .itemDivide:active {
+    background: var(--op-active);
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.itemAdd      { grid-area: g10; }
+.itemSubtract { grid-area: g11; }
+.itemMultiply { grid-area: g12; }
+.itemDivide   { grid-area: g13; }
+
+/* -----------------------------------------------------------
+   EQUALS KEY  =
+   Spans 2 columns — aspect-ratio scaled ×2 to match normal key height
+   ----------------------------------------------------------- */
+.grid > button.itemSolve {
+    grid-area: g15;
+    aspect-ratio: 2 / 0.85;    /* 2-column span — scale ratio to keep height consistent */
+    background: var(--accent);  /* blue accent = most important action on the pad */
+    color: var(--accent-text);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+}
+.grid > button.itemSolve:hover  { background: var(--accent-hover); }
+.grid > button.itemSolve:active {
+    background: var(--accent-active);
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* -----------------------------------------------------------
+   BMI KEY
+   ----------------------------------------------------------- */
+.itemBMICalculation {
+    grid-area: g14;
+    background: var(--special-bg); /* muted, utility feel — not a math key */
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.itemBMICalculation:hover  { background: #46516e; }
+.itemBMICalculation:active {
+    background: #535f7c;
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* -----------------------------------------------------------
+   CLEAR KEY
+   ----------------------------------------------------------- */
+.itemClear {
+    grid-area: g17;
+    background: var(--danger);   /* red = destructive action, don't miss it */
+    color: var(--danger-text);
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.itemClear:hover  { background: var(--danger-hover); }
+.itemClear:active {
+    background: #e03c3c;
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* -----------------------------------------------------------
+   BMI DIALOG / MODAL
+   ----------------------------------------------------------- */
+dialog#modal {
+    border: none;
+    border-radius: var(--radius);
+    padding: clamp(18px, 4vw, 28px);
+    width: min(90vw, 380px);    /* never touches screen edges on phones */
+    box-shadow: var(--shadow);
+    background: #fff;
+    color: #222;
+}
+
+/* ::backdrop is the dimmed layer the browser auto-generates behind <dialog> */
+dialog#modal::backdrop {
+    background: rgba(10, 12, 20, 0.55);
+    backdrop-filter: blur(2px); /* blurs the page behind the popup for visual focus */
+}
+
+dialog#modal form {
     display: flex;
+    flex-direction: column; /* stacks close button / fields / submit top to bottom */
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* --- Close (X) button --- */
+#close {
+    display: flex;
+    justify-content: flex-end; /* pushes X to the top-right corner */
+    margin-bottom: 0.4rem;
+}
+
+#close button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;         /* circular button */
+    background: var(--danger);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+#close button:hover {
+    background: var(--danger-hover);
+    transform: scale(1.08);     /* slight grow on hover for feedback */
+}
+
+/* --- Form field rows --- */
+#Weight, #Height {
+    display: flex;
+    flex-wrap: wrap;        /* label + input drop to separate lines if space is tight */
     align-items: center;
-    justify-content: center;
-    box-shadow: 30 10 19 10px rgb(216, 3, 3), 0 2px 6px rgb(0, 0, 0);
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 label {
-    display: inline-block;          /* allows width control */
-    width: 140px;                   /* fixed label width for alignment */
-    font-weight: bold;              /* makes labels bold */
-    color: #555;                    /* soft dark grey text */
+    display: inline-block;
+    width: 120px;           /* fixed width keeps both labels aligned with each other */
+    font-weight: 600;
+    color: #555;
 }
+
 input[type="text"] {
-    width: calc(100% - 150px);     /* adjusts width next to label */
-    padding: 8px;                  /* space inside input box */
-    border: 1px solid #ccc;        /* light grey border */
-    border-radius: 5px;            /* rounded corners */
-    outline: none;                 /* removes default outline */
-    transition: 0.3s;              /* smooth hover/focus animation */
+    flex: 1 1 120px;    /* grows to fill remaining space; can shrink down to 120px */
+    min-width: 0;       /* allows flex to shrink input below its natural content width */
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-#close{
-    text-align: right;
-}
-#close button{
-    text-align: right;
-    color: white;
-    background-color: red;
-
-}
-#close :hover{
-
-    background-color: rgb(224, 20, 20);
-    
+input[type="text"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(94, 200, 255, 0.25); /* soft glow on active input */
 }
 
-#menuToggle{
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 30px;
-    height: 30px;
+/* --- Calculate button --- */
+#Calculate {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: flex-end; /* aligns button to the right, like a standard form */
 }
 
+#calculateBMI {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+#calculateBMI:hover  { background: var(--accent-hover); }
+#calculateBMI:active {
+    background: var(--accent-active);
+    transform: translateY(1px);
+}
 
-/*menu*/
+/* -----------------------------------------------------------
+   HAMBURGER MENU TOGGLE BUTTON
+   ----------------------------------------------------------- */
+#menuToggle {
+    position: fixed;    /* stays in corner even when page scrolls */
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: var(--calc-bg);
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    z-index: 20;        /* above the side menu panel (z-index: 15) and page content */
+    box-shadow: var(--shadow);
+    transition: background-color 0.15s ease;
+}
+#menuToggle:hover { background: var(--calc-bg-2); }
+
+/* -----------------------------------------------------------
+   SIDE MENU PANEL
+   ----------------------------------------------------------- */
 #content {
-    display: none;
-    position: absolute;
-    top: 35px;
-    left: 5px;
-    min-height: 100vh;
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: #f5f5f7;
+    display: none;      /* JS toggles this to "block" to open the menu */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;      /* full-height overlay, not just as tall as its content */
+    z-index: 15;        /* below the toggle button (20) so the button stays clickable */
 }
 
-/* Side Menu Box */
 #side-menu {
-    width: 250px;
-    background-color: #1a1a1a;
-    padding: 20px 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    width: min(75vw, 250px); /* caps at 250px; on small screens caps at 75% of viewport */
+    height: 100%;
+    background: #1a1a1a;
+    padding: 70px 0 20px;   /* top padding clears the hamburger toggle button */
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Menu Links */
 #side-menu a {
-    display: block; /* Makes the entire row clickable */
+    display: block;         /* makes the whole row clickable, not just the text */
     text-decoration: none;
-    padding: 0 20px;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    padding: 0 24px;
+    transition: background-color 0.2s ease;
 }
 
-/* Menu Text inside Links */
 #side-menu a p {
-    color: #cccccc;
+    margin: 0;
+    padding: 13px 0;
+    color: #ccc;
     font-size: 16px;
     font-weight: 500;
-    margin: 0;
-    padding: 12px 0; /* Creates vertical spacing between items */
 }
 
-/* Hover Effects */
-#side-menu a:hover {
-    background-color: #333333;
-}
+#side-menu a:hover         { background: #333; }
+#side-menu a:hover p       { color: #fff; }
 
-#side-menu a:hover p {
-    color: #ffffff;
-}
+/* -----------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+   ----------------------------------------------------------- */
 
-#positioning{
-    margin-left: 10%;
-    margin-right: 10%;}
+/* Tablet / large phone — tighten grid spacing */
+@media (max-width: 520px) {
+    #positioning { padding: 0 3vw 2rem; }
 
-
-@media (max-width: 768px) {
-    form {
-        width: 90%;              /* form becomes wider on small screens */
+    .grid {
+        gap: 6px;
+        padding: 10px;
+        border-radius: 10px;
     }
 
+    .grid > button { border-radius: 8px; }
+
+    /* stack label above input on narrow screens */
     label {
-        display: block;         /* label moves above input */
-        width: 100%;            /* full width label */
-        margin-bottom: 5px;     /* spacing below label */
+        display: block;
+        width: 100%;
+        margin-bottom: 4px;
     }
 
     input[type="text"] {
-        width: 100%;            /* inputs take full width */
+        width: 100%;
+        flex-basis: 100%;
     }
+}
+
+/* Small phones — shrink button text so nothing clips */
+@media (max-width: 360px) {
+    h1 { margin: 0.8em 0 0.5em; }
+    .grid > button { font-size: 0.9rem; }
+}
+
+/* Desktop — give the calculator a touch more breathing room */
+@media (min-width: 900px) {
+    .grid { width: 460px; }
 }
